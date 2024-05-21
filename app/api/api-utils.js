@@ -16,11 +16,12 @@ export const getData = async (url) => {
 };
 
 export const normalizeDataObject = (obj) => {
-    return {
-        ...obj,
-        category: obj.categories,
-        users: obj.users_permissions_users,
-    };
+    let str = JSON.stringify(obj);
+
+    str = str.replaceAll("_id", "id");
+    const newObj = JSON.parse(str);
+    const result = { ...newObj, category: newObj.categories };
+    return result;
 };
 
 export const normalizeData = (data) => {
@@ -37,9 +38,9 @@ export const getNormalizedGamesById = async (url, id) => {
 export const getNormalizedGamesDataByCategory = async (url, category) => {
     try {
         const data = await getData(`${url}?categories.name=${category}`);
-        if (!data.length) {
-            throw new Error("Нет игр в категории");
-        }
+        // if (!data.length) {
+        //     throw new Error("Нет игр в категории");
+        // }
         return isResponseOk(data) ? normalizeData(data) : data;
     } catch (error) {
         return error;
@@ -73,7 +74,7 @@ export const vote = async (url, jwt, usersArray) => {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`,
             },
-            body: JSON.stringify({ users_permissions_users: usersArray }),
+            body: JSON.stringify({ users: usersArray }),
         });
         if (response.status !== 200) {
             throw new Error("Ошибка голосования");
