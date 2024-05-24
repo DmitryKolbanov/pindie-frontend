@@ -1,4 +1,4 @@
-export const BASE_URL = "callban-backend.nomoredomainswork.ru/api";
+export const BASE_URL = "https://callban-pindie.nomoredomainswork.ru//api";
 // export const BASE_URL = "http://localhost:3001/api";
 
 export const endpoints = {
